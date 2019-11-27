@@ -22,13 +22,21 @@ export default class App extends Component {
   renderBoard = () => {
     return Array.apply(null, Array(Constants.BOARD_SIZE)).map((el, rowIndex) => {
       let cellList = Array.apply(null, Array(Constants.BOARD_SIZE)).map((el, colIndex) => {
-        return <Cell key={colIndex} width={Constants.CELL_SIZE} height={Constants.CELL_SIZE} />
+        return <Cell
+                  onReveal={this.onReveal}
+                  key={colIndex}
+                  width={Constants.CELL_SIZE}
+                  height={Constants.CELL_SIZE}
+                  x={colIndex}
+                  y={rowIndex}
+                  ref={(ref) => { this.grid[colIndex][rowIndex] = ref }}
+                />
       });
 
       return (
-        <View style={{ width: this.boardWidth, height: Constants.CELL_SIZE, flexDirection: 'row' }}>
+        <View key={rowIndex} style={{ width: this.boardWidth, height: Constants.CELL_SIZE, flexDirection: 'row' }}>
           {cellList}
-        </View>
+        </View >
       )
     });
   }
@@ -40,9 +48,9 @@ export default class App extends Component {
       <View style={styles.container}>
         <Text style={styles.title}>The GrinchSweeper</Text>
         <Button
-            onPress={this.onPressButton}
-            title="Press Me"
-          />
+          onPress={this.onPressButton}
+          title="Press Me"
+        />
         <Text style={styles.description}>hedsmlksnhvkjhfkjahbscljks</Text>
         <View style={{ width: this.boardWidth, height: this.boardWidth, backgroundColor: '#888888', flexDirection: 'column' }}>
           {this.renderBoard()}
@@ -63,13 +71,13 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    padding: 10, 
+    padding: 10,
     fontSize: 35
   },
 
-  description:{
+  description: {
     padding: 10,
-    fontSize:15,
-    
+    fontSize: 15,
+
   }
 });
