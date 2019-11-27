@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet, View, Text, Button, Alert } from 'react-native';
 import Constants from './Constants';
 import Cell from './Components/Cell';
 
@@ -19,18 +19,28 @@ export default class App extends Component {
     alert('You tapped the button!')
   };
 
+
+  onDie = () => {
+    Alert.alert('Oh no! Grinch just ruined Christmas!')
+  }
+
+  onReveal = (x, y) => {
+
+  }
+
   renderBoard = () => {
     return Array.apply(null, Array(Constants.BOARD_SIZE)).map((el, rowIndex) => {
       let cellList = Array.apply(null, Array(Constants.BOARD_SIZE)).map((el, colIndex) => {
         return <Cell
-                  onReveal={this.onReveal}
-                  key={colIndex}
-                  width={Constants.CELL_SIZE}
-                  height={Constants.CELL_SIZE}
-                  x={colIndex}
-                  y={rowIndex}
-                  ref={(ref) => { this.grid[colIndex][rowIndex] = ref }}
-                />
+          onDie={this.onDie}
+          onReveal={this.onReveal}
+          key={colIndex}
+          width={Constants.CELL_SIZE}
+          height={Constants.CELL_SIZE}
+          x={colIndex}
+          y={rowIndex}
+          ref={(ref) => { this.grid[colIndex][rowIndex] = ref }}
+        />
       });
 
       return (
