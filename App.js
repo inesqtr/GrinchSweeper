@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Button, Alert } from 'react-native';
+import { StyleSheet, View, Text, Alert, SafeAreaView, TouchableHighlight, Modal, Image } from 'react-native';
 import Constants from './Constants';
 import Cell from './Components/Cell';
+import Images from './assets/Images';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      modalVisible: false,
+    }
 
     //create grid
     this.boardWidth = Constants.CELL_SIZE * Constants.BOARD_SIZE;
@@ -16,13 +21,12 @@ export default class App extends Component {
     });
   }
 
-  onPressButton() {
-    Alert.alert('You tapped the button!')
-  };
-
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible });
+  }
 
   onDie = () => {
-    Alert.alert('Oh no! Grinch just ruined Christmas!')
+    Alert.alert('Oh no! Grinch succeded and you just destroyed your Christmas!')
     for (let i = 0; i < Constants.BOARD_SIZE; i++) {
       for (let j = 0; j < Constants.BOARD_SIZE; j++) {
         this.grid[i][j].revealAllCells();
@@ -99,18 +103,61 @@ export default class App extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
+        
+       <Image source={Images.grinch} style={{ width: 90, height: 90}} />
+
         <Text style={styles.title}>The GrinchSweeper</Text>
-        <Button
-          onPress={this.onPressButton}
-          title="Press Me"
-        />
-        <Text style={styles.description}>hedsmlksnhvkjhfkjahbscljks</Text>
+        <Text style={styles.subTitle}>- Save your Christmas -</Text>
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+          }}
+        >
+
+
+          <View style={styles.modal}>
+            <Text style={styles.modalText}>Grinch is trying to ruin your Christmas, so he planted some small mines next to Santa's gifts storage. </Text>
+            <Text style={styles.modalText}>Click anywhere on the board to start playing. The numbers show how many Grinch mines are adjacent to any given cell.</Text>
+            <Text style={styles.modalText}>Try to sweep the little grinches, to save your Christmas.</Text>
+            <Text style={styles.modalText}>If you step on one, all the gifts will explode...</Text>
+
+            <TouchableHighlight
+              style={styles.modalButton}
+              onPress={() => {
+                this.setModalVisible(!this.state.modalVisible);
+              }}
+            >
+              <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                CLOSE
+              </Text>
+            </TouchableHighlight>
+          </View>
+
+        </Modal>
+
+        <TouchableHighlight
+          style={styles.button}
+          onPress={() => {
+            this.setModalVisible(true);
+          }}>
+          <Text  style={{ color: 'black', fontWeight: 'bold' }}>
+            INSTRUCTIONS
+          </Text>
+        </TouchableHighlight>
+
         <View style={{ width: this.boardWidth, height: this.boardWidth, backgroundColor: '#888888', flexDirection: 'column' }}>
           {this.renderBoard()}
         </View>
-        <Button onPress={this.resetGame} title="Play Again" />
-      </View>
+        <TouchableHighlight onPress={this.resetGame} title="Play Again" style={styles.button}>
+          <Text style={{ color: 'black', fontWeight: 'bold' }} >PLAY AGAIN</Text>
+        </TouchableHighlight>
+
+      </SafeAreaView>
+
     )
 
   }
@@ -122,16 +169,51 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#0D8584'
+    backgroundColor: '#046306'
   },
 
   title: {
-    padding: 10,
-    fontSize: 35
+    //paddingTop: 25,
+    fontSize: 35,
+    color: '#EDF1DB',
+    fontWeight: 'bold',
   },
 
-  description: {
+  subTitle: {
     padding: 10,
-    fontSize: 15,
-  }
+    fontSize: 20,
+    color: 'white'
+  },
+
+  button:{
+    margin: 25,
+    padding: 10,
+    backgroundColor:'#ffdbc5',
+    borderRadius: 10,
+  },
+
+  modal: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#ffdbc5',
+    padding:5
+  },
+
+  modalText: {
+    padding: 10,
+    fontSize: 20,
+    textAlign:'justify'
+  },
+
+  modalButton: {
+    backgroundColor: 'black',
+    marginTop: 25,
+    padding: 10,
+    borderRadius: 10
+  },
+
+  
+
+
 });
