@@ -7,6 +7,7 @@ export default class App extends Component {
   constructor(props) {
     super(props);
 
+    //create grid
     this.boardWidth = Constants.CELL_SIZE * Constants.BOARD_SIZE;
     this.grid = Array.apply(null, Array(Constants.BOARD_SIZE)).map((el, index) => {
       return Array.apply(null, Array(Constants.BOARD_SIZE)).map((el, index) => {
@@ -16,18 +17,54 @@ export default class App extends Component {
   }
 
   onPressButton() {
-    alert('You tapped the button!')
+    Alert.alert('You tapped the button!')
   };
 
 
   onDie = () => {
     Alert.alert('Oh no! Grinch just ruined Christmas!')
+    for (let i = 0; i < Constants.BOARD_SIZE; i++) {
+      for (let j = 0; j < Constants.BOARD_SIZE; j++) {
+        this.grid[i][j].revealAllCells();
+      }
+    }
   }
 
+  revealNeighbours = (x, y) => {
+    for (let i = -1; i <= 1; i++) {
+      for (let j = -1; j <= 1; j++) {
+        if (x + i >= 0 && x + i <= Constants.BOARD_SIZE - 1 && y + j >= 0 && y + j <= Constants.BOARD_SIZE - 1)
+          this.grid[x + i][y + j].onReveal();
+      }
+    }
+  }
+
+  //click on cell and shows
   onReveal = (x, y) => {
+    let neighbours = 0;
+
+    for (let i = -1; i <= 1; i++) {
+      for (let j = -1; j <= 1; j++) {
+        //to not overflow grid
+        if (x + i >= 0 && x + i <= Constants.BOARD_SIZE - 1 && y + j >= 0 && y + j <= Constants.BOARD_SIZE - 1)
+          if (this.grid[x + i][y + j].state.isGrinch) {
+            neighbours++;
+          }
+      }
+    }
+
+    if (neighbours) {
+      this.grid[x][y].setState({
+        neighbours: neighbours
+      })
+    } else {
+      this.revealNeighbours(x, y);
+    }
 
   }
 
+
+  //function to show grid
   renderBoard = () => {
     return Array.apply(null, Array(Constants.BOARD_SIZE)).map((el, rowIndex) => {
       let cellList = Array.apply(null, Array(Constants.BOARD_SIZE)).map((el, colIndex) => {
@@ -51,6 +88,13 @@ export default class App extends Component {
     });
   }
 
+  resetGame = () => {
+    for (let i = 0; i < Constants.BOARD_SIZE; i++) {
+      for (let j = 0; j < Constants.BOARD_SIZE; j++) {
+        this.grid[i][j].reset();
+      }
+    }
+  }
 
 
   render() {
@@ -65,6 +109,7 @@ export default class App extends Component {
         <View style={{ width: this.boardWidth, height: this.boardWidth, backgroundColor: '#888888', flexDirection: 'column' }}>
           {this.renderBoard()}
         </View>
+        <Button onPress={this.resetGame} title="Play Again" />
       </View>
     )
 
@@ -88,6 +133,5 @@ const styles = StyleSheet.create({
   description: {
     padding: 10,
     fontSize: 15,
-
   }
 });
