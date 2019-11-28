@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Snow from 'react-native-snow';
 import { StyleSheet, View, Text, Alert, SafeAreaView, TouchableHighlight, Modal, Image } from 'react-native';
 import Constants from './Constants';
 import Cell from './Components/Cell';
@@ -12,7 +13,7 @@ export default class App extends Component {
       modalVisible: false,
     }
 
-    //create grid
+    //initialize grid 10*10
     this.boardWidth = Constants.CELL_SIZE * Constants.BOARD_SIZE;
     this.grid = Array.apply(null, Array(Constants.BOARD_SIZE)).map((el, index) => {
       return Array.apply(null, Array(Constants.BOARD_SIZE)).map((el, index) => {
@@ -43,7 +44,7 @@ export default class App extends Component {
     }
   }
 
-  //click on cell and shows
+  //click on cell and shows neighbours
   onReveal = (x, y) => {
     let neighbours = 0;
 
@@ -51,6 +52,7 @@ export default class App extends Component {
       for (let j = -1; j <= 1; j++) {
         //to not overflow grid
         if (x + i >= 0 && x + i <= Constants.BOARD_SIZE - 1 && y + j >= 0 && y + j <= Constants.BOARD_SIZE - 1)
+          //count how many grinches are on the adjacent cells
           if (this.grid[x + i][y + j].state.isGrinch) {
             neighbours++;
           }
@@ -104,8 +106,8 @@ export default class App extends Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        
-       <Image source={Images.grinch} style={{ width: 90, height: 90}} />
+        <Snow />
+        <Image source={Images.grinch} style={{ width: 90, height: 90 }} />
 
         <Text style={styles.title}>The GrinchSweeper</Text>
         <Text style={styles.subTitle}>- Save your Christmas -</Text>
@@ -144,7 +146,7 @@ export default class App extends Component {
           onPress={() => {
             this.setModalVisible(true);
           }}>
-          <Text  style={{ color: 'black', fontWeight: 'bold' }}>
+          <Text style={{ color: 'black', fontWeight: 'bold' }}>
             INSTRUCTIONS
           </Text>
         </TouchableHighlight>
@@ -152,6 +154,7 @@ export default class App extends Component {
         <View style={{ width: this.boardWidth, height: this.boardWidth, backgroundColor: '#888888', flexDirection: 'column' }}>
           {this.renderBoard()}
         </View>
+
         <TouchableHighlight onPress={this.resetGame} title="Play Again" style={styles.button}>
           <Text style={{ color: 'black', fontWeight: 'bold' }} >PLAY AGAIN</Text>
         </TouchableHighlight>
@@ -185,10 +188,10 @@ const styles = StyleSheet.create({
     color: 'white'
   },
 
-  button:{
+  button: {
     margin: 25,
     padding: 10,
-    backgroundColor:'#ffdbc5',
+    backgroundColor: '#ffdbc5',
     borderRadius: 10,
   },
 
@@ -197,13 +200,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#ffdbc5',
-    padding:5
+    padding: 5
   },
 
   modalText: {
     padding: 10,
     fontSize: 20,
-    textAlign:'justify'
+    textAlign: 'justify'
   },
 
   modalButton: {
@@ -213,7 +216,7 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
 
-  
+
 
 
 });
