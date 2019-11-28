@@ -4176,6 +4176,13 @@ react-native-branch@~3.0.1:
   resolved "https://registry.yarnpkg.com/react-native-branch/-/react-native-branch-3.0.1.tgz#5b07b61cbd290168cd3c3662e017ebe0f356d2ca"
   integrity sha512-vbcYxPZlpF5f39GAEUF8kuGQqCNeD3E6zEdvtOq8oCGZunHXlWlKgAS6dgBKCvsHvXgHuMtpvs39VgOp8DaKig==
 
+react-native-snow@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-snow/-/react-native-snow-0.2.0.tgz#bbf13fc7e627d07d1ab6eb174ed8dd2886f75a81"
+  integrity sha512-cI58rlOUlu1W4nB4c+ItkAy4DS9Eh9QMUk8T/uFQYVq8omP2sxKzPXS1E7jo2FxWLcdajCeXzPB237+FheHphw==
+  dependencies:
+    prop-types "^15.6.0"
+
 react-native-view-shot@2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/react-native-view-shot/-/react-native-view-shot-2.6.0.tgz#3b23675826f67658366352c4b97b59a6aded2f43"
