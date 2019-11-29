@@ -22,9 +22,11 @@ export default class App extends Component {
     });
   }
 
+
   setModalVisible(visible) {
     this.setState({ modalVisible: visible });
   }
+
 
   onDie = () => {
     Alert.alert('Oh no! Grinch succeded and you just destroyed your Christmas!')
@@ -35,6 +37,26 @@ export default class App extends Component {
     }
   }
 
+  onWin = () => {
+    Alert.alert('Yey! Congratulations! You just saved Christmas!')
+    for (let i = 0; i < Constants.BOARD_SIZE; i++) {
+      for (let j = 0; j < Constants.BOARD_SIZE; j++) {
+        this.grid[i][j].revealAllCells();
+      }
+    }
+  }
+
+
+  getWinner = () => {
+    for (let i = 0; i < Constants.BOARD_SIZE; i++) {
+      for (let j = 0; j < Constants.BOARD_SIZE; j++) {
+        if (!this.grid[i][j].state.revealed && !this.grid[i][j].state.isGrinch) return false;
+        if (!this.grid[i][j].state.revealed && this.grid[i][j].state.isGrinch) return true;
+      }
+    } 
+    return;
+  }
+
   revealNeighbours = (x, y) => {
     for (let i = -1; i <= 1; i++) {
       for (let j = -1; j <= 1; j++) {
@@ -43,6 +65,7 @@ export default class App extends Component {
       }
     }
   }
+
 
   //click on cell and shows neighbours
   onReveal = (x, y) => {
@@ -66,7 +89,6 @@ export default class App extends Component {
     } else {
       this.revealNeighbours(x, y);
     }
-
   }
 
 
@@ -76,6 +98,8 @@ export default class App extends Component {
       let cellList = Array.apply(null, Array(Constants.BOARD_SIZE)).map((el, colIndex) => {
         return <Cell
           onDie={this.onDie}
+          onWin={this.onWin}
+          getWinner={this.getWinner}
           onReveal={this.onReveal}
           key={colIndex}
           width={Constants.CELL_SIZE}
@@ -105,6 +129,7 @@ export default class App extends Component {
 
   render() {
     return (
+      
       <SafeAreaView style={styles.container}>
         <Snow />
         <Image source={Images.grinch} style={{ width: 90, height: 90 }} />

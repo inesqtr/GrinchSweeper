@@ -14,6 +14,7 @@ export default class Cell extends Component {
         }
     }
 
+
     revealAllCells = () => {
         if (this.state.revealed) {
             return;
@@ -24,8 +25,12 @@ export default class Cell extends Component {
         })
     }
 
+
+
     //when clicking the cell
     onReveal = (playerInitiated) => {
+        const winner = this.props.getWinner();
+
         if (this.state.revealed) {
             return;
         }
@@ -34,13 +39,16 @@ export default class Cell extends Component {
             return;
         }
 
+
         //change state of cell
         this.setState({
             revealed: true
             //to not exceed the maximum call stack
         }, () => {
+            if (winner) {
+                this.props.onWin();
             //if there's a grinch on the cell
-            if (this.state.isGrinch) {
+            } else if (this.state.isGrinch) {
                 this.props.onDie();
             } else {
                 //if it's not a grinch
@@ -48,6 +56,7 @@ export default class Cell extends Component {
             }
         });
     }
+
 
     reset = () => {
         this.setState({
@@ -57,12 +66,13 @@ export default class Cell extends Component {
         })
     }
 
+
     render() {
         const { width, height } = this.props;
         const { revealed, isGrinch, neighbours } = this.state;
-
         if (!revealed) {
             return (
+
                 //create opacity when you click a cell and make it functional
                 <TouchableOpacity onPress={this.onReveal}>
                     <View style={[styles.cell, { width: width, height: height }]}>
